@@ -35,18 +35,33 @@
       "metadata": {
         "description": "Windows server SKU"
       },
-      "defaultValue": "Windows-Server-Technical-Preview"
+      "defaultValue": "2012-R2-Datacenter"
     },
+        "standardVmSize": {
+            "type": "string",
+            "allowedValues": [
+        "Standard_A0",
+        "Standard_A1"
+      ],
+            "defaultValue": "Standard_A1",
+            "metadata": {
+                "description": "The size of the AD/GW/CB VMs"
+            }
+        },
         "numberOfRdshInstances": {
             "type": "int",
-            "defaultValue": 2,
+            "defaultValue": 1,
             "metadata": {
                 "description": "Number of RDSH instances"
             }
         },
         "rdshVmSize": {
-            "type": "string",
-            "defaultValue": "Standard_D2",
+            "type": "string",            
+            "allowedValues": [
+        "Standard_D1_v2",
+        "Standard_D2_v2"
+      ],
+            "defaultValue": "Standard_D1_v2",
             "metadata": {
                 "description": "The size of the RDSH VMs"
             }
@@ -56,9 +71,9 @@
         "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'rds', 'storage')]",
         "imagePublisher": "MicrosoftWindowsServer",
         "imageOffer": "WindowsServer",
-        "vnetAddressRange": "10.0.0.0/16",
-        "subnetAddressRange": "10.0.0.0/24",
-        "dnsServerPrivateIp": "10.0.0.8",
+        "vnetAddressRange": "10.11.0.0/16",
+        "subnetAddressRange": "10.11.0.0/24",
+        "dnsServerPrivateIp": "10.11.0.8",
         "subnetName": "Subnet",
         "subnet-id": "[concat(resourceId('Microsoft.Network/virtualNetworks','vnet'),'/subnets/',variables('subnetName'))]",
         "publicIpRef": "publicIp",
@@ -268,7 +283,7 @@
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_D2"
+          "vmSize": "[parameters('standardVmSize')]"
         },
         "osProfile": {
           "computerName": "dc",
@@ -472,7 +487,7 @@
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_D2"
+          "vmSize": "[parameters('standardVmSize')]"
         },
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets', 'gw-availabilityset')]"
@@ -636,7 +651,7 @@
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_D2"
+          "vmSize": "[parameters('standardVmSize')]"
         },
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets', 'cb-availabilityset')]"
